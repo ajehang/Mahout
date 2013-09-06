@@ -60,7 +60,20 @@ public class CsvToVectorMapper extends Mapper<LongWritable, Text, Text, VectorWr
 			for(int i=1;i<values.length;i++)
 			    {
 				try{
+				Pattern p = Pattern.compile(".*?([0-9]+)?([0-9]+).*");
+				for(int i=0;i<responseArray.length;){
+				    Matcher m = p.matcher(responseArray[i]);
+				    if (m.matches())
+					{
+					    long time = Long.valueOf(m.group(1)); // timestamp
+					    double value= Double.valueOf(m.group(2)); // value
+					    map.put(time, value);
+					    //	    System.out.println("time:"+time+"  "+"value:"+value);
+					}
+				    i=i+1;
+				}
 				v = Double.parseDouble(values[i]);
+				System.out.println("value"+v);
 				}
 				catch (NumberFormatException e) {
 				throw new IOException("CSV file contains non-numeric data");

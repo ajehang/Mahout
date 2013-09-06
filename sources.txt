@@ -1,0 +1,12 @@
+./src/core/src/main/java/org/apache/mahout/feature/mrmr/MRMRReducer.java
+./src/core/src/main/java/org/apache/mahout/feature/mrmr/MRMRDriver.java
+./src/core/src/main/java/org/apache/mahout/feature/mrmr/MRMRMapper.java
+./src/core/src/main/java/org/apache/mahout/feature/common/mapreduce/MaxReducer.java
+./src/core/src/main/java/org/apache/mahout/feature/common/mapreduce/MaxCombiner.java
+./src/core/src/main/java/org/apache/mahout/feature/common/commandline/DefaultOptionCreator.java
+./src/core/src/main/java/org/apache/mahout/feature/common/correlation/MutualInformation.java
+./src/core/src/main/java/org/apache/mahout/feature/common/correlation/PearsonCorrelation.java
+./src/core/src/main/java/org/apache/mahout/feature/common/csv/CsvToVectorMapper.java
+./src/core/src/main/java/org/apache/mahout/feature/common/csv/CsvToVectorDriver.java
+./src/core/src/test/java/org/apache/mahout/feature/common/correlation/PearsonCorrelationTest.java
+./src/core/src/test/java/org/apache/mahout/feature/common/correlation/MutualInformationTest.java
