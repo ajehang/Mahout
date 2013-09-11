@@ -16,7 +16,7 @@
  */
 package org.apache.mahout.feature.mrmr;
 
-import org.apache.mahout.feature.mrmr.common.commandline.DefaultOptionCreator;
+import org.apache.mahout.feature.common.commandline.DefaultOptionCreator;
 import org.apache.mahout.feature.common.correlation.MutualInformation;
 
 import org.apache.hadoop.conf.Configuration;

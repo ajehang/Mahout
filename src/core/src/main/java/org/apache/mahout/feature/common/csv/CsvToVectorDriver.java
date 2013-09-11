@@ -16,7 +16,7 @@
  */
 package org.apache.mahout.feature.common.csv;
 
-import org.apache.mahout.feature.mrmr.common.commandline.DefaultOptionCreator;
+import org.apache.mahout.feature.common.commandline.DefaultOptionCreator;
 
 import org.apache.mahout.common.AbstractJob;
 import org.apache.mahout.common.HadoopUtil;

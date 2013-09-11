@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.mahout.feature.mrmr.common.mapreduce;
+package org.apache.mahout.feature.common.mapreduce;
 
-import org.apache.mahout.feature.mrmr.common.commandline.DefaultOptionCreator;
+import org.apache.mahout.feature.common.commandline.DefaultOptionCreator;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;

@@ -16,9 +16,9 @@
  */
 package org.apache.mahout.feature.mrmr;
 
-import org.apache.mahout.feature.mrmr.common.commandline.DefaultOptionCreator;
-import org.apache.mahout.feature.mrmr.common.mapreduce.MaxCombiner;
-import org.apache.mahout.feature.mrmr.common.mapreduce.MaxReducer;
+import org.apache.mahout.feature.common.commandline.DefaultOptionCreator;
+import org.apache.mahout.feature.common.mapreduce.MaxCombiner;
+import org.apache.mahout.feature.common.mapreduce.MaxReducer;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
