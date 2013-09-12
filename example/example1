@@ -31,8 +31,8 @@ DATASET=part-r-00000
 
 # END configuration
 
-rm -r ${OUTPUT_DIR}
-rm -r temp/
+hadoop dfs  -rmr ${OUTPUT_DIR}/${DATA_DIR}
+hadoop dfs  -rmr temp/
 
 # Conversion from CSV to Vectorized data
 ${MAHOUT_HOME}/bin/mahout hadoop jar ${LIB_DIR}/mahout_feature.jar \
