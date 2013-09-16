@@ -26,6 +26,8 @@ public final class DefaultOptionCreator {
 	public static final String ROW_NUMBER = "numRows";
 	public static final String COLUMN_NUMBER = "numCols";
 	public static final String FEATURE_NUMBER = "numFeature";
+	public static final String BEGIN_POINT = "beginTime";
+	public static final String END_POINT = "endTime";
 	
 	public static DefaultOptionBuilder targetColumnOption() {
 		return new DefaultOptionBuilder()
@@ -74,5 +76,27 @@ public final class DefaultOptionCreator {
                 .withMaximum(1).create())
         .withDescription(
             "Number of feature to select");
+	}
+	public static DefaultOptionBuilder startIntervalOption() {
+		return new DefaultOptionBuilder()
+        .withLongName(BEGIN_POINT)
+        .withRequired(true)
+        .withShortName("begin")
+        .withArgument(
+            new ArgumentBuilder().withName(BEGIN_POINT).withMinimum(1)
+                .withMaximum(1).create())
+        .withDescription(
+            "Start point of Interval");
+	}
+	public static DefaultOptionBuilder endIntervalOption() {
+		return new DefaultOptionBuilder()
+        .withLongName(END_POINT)
+        .withRequired(true)
+        .withShortName("end")
+        .withArgument(
+            new ArgumentBuilder().withName(END_POINT).withMinimum(1)
+                .withMaximum(1).create())
+        .withDescription(
+            "End point of Interval");
 	}
 }

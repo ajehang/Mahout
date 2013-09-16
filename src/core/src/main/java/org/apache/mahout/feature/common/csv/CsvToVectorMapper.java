@@ -33,10 +33,14 @@ import java.io.IOException;
 public class CsvToVectorMapper extends Mapper<LongWritable, Text, Text, VectorWritable> {
 		
 	private int columnNumber;
+	long begin_point;
+	long end_point;
 	
 	protected void setup(Context context) throws IOException, InterruptedException {
 		Configuration conf = context.getConfiguration();
 		columnNumber = Integer.parseInt(conf.get(DefaultOptionCreator.COLUMN_NUMBER));
+		begin_point=Long.parseLong(conf.get(DefaultOptionCreator.BEGIN_POINT));
+		end_point=Long.parseLong(conf.get(DefaultOptionCreator.END_POINT));
 	}
 			
 	public void map(LongWritable key, Text line, Context context) throws IOException, InterruptedException {
@@ -49,8 +53,7 @@ public class CsvToVectorMapper extends Mapper<LongWritable, Text, Text, VectorWr
 		int k = 0;
 		double v = 0.0;
 		long time=0;
-		long start_time=1377605100;
-		long end_time=1377618900;
+
 		String keystring="";
 		Vector input = new RandomAccessSparseVector(columnNumber);
 		String[] values = line.toString().split(";");
@@ -59,8 +62,8 @@ public class CsvToVectorMapper extends Mapper<LongWritable, Text, Text, VectorWr
 		if(values.length > 4)
 		    {
 			keystring=values[0];
-			long s_interval=start_time;
-			long e_interval=start_time+300;
+			long s_interval=begin_point;
+			long e_interval=begin_point+300;
 			
 			long count_num=1;
 			for(int i=1;i<values.length;i++)
@@ -68,14 +71,16 @@ public class CsvToVectorMapper extends Mapper<LongWritable, Text, Text, VectorWr
 				try{
 				String[] time_value= values[i].split("=");
 				time = Long.parseLong(time_value[0]);
-				v += Double.parseDouble(time_value[1]);
+					if(time >= begin_point && time <= end_point){
+						v += Double.parseDouble(time_value[1]);
+					}
 				}
 				catch (NumberFormatException e) {
 				throw new IOException("CSV file contains non-numeric data");
 				}
-				if(time >= e_interval){
+				if(time >= e_interval && time <= end_point){
 					input.setQuick(k,v/count_num);
-					System.out.println(k+","+(v/count_num));
+					System.out.println(time);
 					k++;
 					v=0;
 					count_num=0;
@@ -85,10 +90,9 @@ public class CsvToVectorMapper extends Mapper<LongWritable, Text, Text, VectorWr
 				count_num++;
 			    }
 			
-			while(e_interval <= end_time){
+			while(e_interval <= end_point){
 				v=0;
 				input.setQuick(k,v);
-				System.out.println(k+","+(v/count_num));
 				k++;
 				e_interval+=300;
 			}
