@@ -55,6 +55,7 @@ public class CsvToVectorDriver extends AbstractJob {
 		addOption(DefaultOptionCreator.startTimeOption().create());
 		addOption(DefaultOptionCreator.endTimeOption().create());
 		addOption(DefaultOptionCreator.sloValueOption().create());
+		addOption(DefaultOptionCreator.targetMetricOption().create());
 		Map<String,List<String>> parsedArgs = parseArguments(args);
 		
 		Path input = getInputPath();
@@ -64,11 +65,13 @@ public class CsvToVectorDriver extends AbstractJob {
 		long start_time = new java.text.SimpleDateFormat("yyyy/MM/dd-HH:mm").parse(getOption(DefaultOptionCreator.START_TIME)).getTime() / 1000;
 		long end_time = new java.text.SimpleDateFormat("yyyy/MM/dd-HH:mm").parse(getOption(DefaultOptionCreator.END_TIME)).getTime() / 1000;
 		double slo_value = Double.parseDouble(getOption(DefaultOptionCreator.SLO_VALUE));
+		String target_metric=getOption(DefaultOptionCreator.TARGET_METRIC);
 		Configuration confVector = getConf();
 		confVector.set(DefaultOptionCreator.COLUMN_NUMBER, ""+columnNumber);
 		confVector.set(DefaultOptionCreator.START_TIME, ""+start_time);
 		confVector.set(DefaultOptionCreator.END_TIME, ""+end_time);
                 confVector.set(DefaultOptionCreator.SLO_VALUE, ""+slo_value);
+		confVector.set(DefaultOptionCreator.TARGET_METRIC, ""+target_metric);
 		Job jobVector = HadoopUtil.prepareJob(input,
                            output,
                            TextInputFormat.class,

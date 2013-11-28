@@ -36,12 +36,15 @@ public class CsvToVectorMapper extends Mapper<LongWritable, Text, Text, VectorWr
 	long start_time;
 	long end_time;
 	double slo_value;
+        String target_metric;
 	protected void setup(Context context) throws IOException, InterruptedException {
 		Configuration conf = context.getConfiguration();
 		columnNumber = Integer.parseInt(conf.get(DefaultOptionCreator.COLUMN_NUMBER));
 		start_time=Long.parseLong(conf.get(DefaultOptionCreator.START_TIME));
 		end_time=Long.parseLong(conf.get(DefaultOptionCreator.END_TIME));
                 slo_value=Double.parseDouble(conf.get(DefaultOptionCreator.SLO_VALUE));
+		target_metric=conf.get(DefaultOptionCreator.TARGET_METRIC);
+
 	}
 			
 	public void map(LongWritable key, Text line, Context context) throws IOException, InterruptedException {
@@ -84,16 +87,17 @@ public class CsvToVectorMapper extends Mapper<LongWritable, Text, Text, VectorWr
 				 // First line in csv file should be class metric(slo metric)
 				// if aggregated value greater than slo value, set 1 as violation for interval 
 				// otherwise set 0 for compliance 
-				    if (key.get() == 1) {
-					if (agg_v>slo_value)
+				    if (keystring == target_metric) {
+					if (agg_v>slo_value){
 					    input.setQuick(k,1);
-					else
+					}
+					else{
 					    input.setQuick(k,0);
+					}
 				    } 
 				// if line is not class metric use aggregated value for interval  
 				    else{
-					 input.setQuick(k,v/count_num);
-					 System.out.println(time);
+					 input.setQuick(k,agg_v);
 				    }
 					k++;
 					v=0;
