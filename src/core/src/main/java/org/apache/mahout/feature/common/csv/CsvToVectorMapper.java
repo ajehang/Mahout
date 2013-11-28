@@ -33,14 +33,15 @@ import java.io.IOException;
 public class CsvToVectorMapper extends Mapper<LongWritable, Text, Text, VectorWritable> {
 		
 	private int columnNumber;
-	long begin_point;
-	long end_point;
-	
+	long start_time;
+	long end_time;
+	double slo_value;
 	protected void setup(Context context) throws IOException, InterruptedException {
 		Configuration conf = context.getConfiguration();
 		columnNumber = Integer.parseInt(conf.get(DefaultOptionCreator.COLUMN_NUMBER));
-		begin_point=Long.parseLong(conf.get(DefaultOptionCreator.BEGIN_POINT));
-		end_point=Long.parseLong(conf.get(DefaultOptionCreator.END_POINT));
+		start_time=Long.parseLong(conf.get(DefaultOptionCreator.START_TIME));
+		end_time=Long.parseLong(conf.get(DefaultOptionCreator.END_TIME));
+                slo_value=Double.parseDouble(conf.get(DefaultOptionCreator.SLO_VALUE));
 	}
 			
 	public void map(LongWritable key, Text line, Context context) throws IOException, InterruptedException {
@@ -62,8 +63,8 @@ public class CsvToVectorMapper extends Mapper<LongWritable, Text, Text, VectorWr
 		if(values.length > 4)
 		    {
 			keystring=values[0];
-			long s_interval=begin_point;
-			long e_interval=begin_point+300;
+			long s_interval=start_time;
+			long e_interval=start_time+300;
 			
 			long count_num=1;
 			for(int i=1;i<values.length;i++)
@@ -71,16 +72,29 @@ public class CsvToVectorMapper extends Mapper<LongWritable, Text, Text, VectorWr
 				try{
 				String[] time_value= values[i].split("=");
 				time = Long.parseLong(time_value[0]);
-					if(time >= begin_point && time <= end_point){
+					if(time >= start_time && time <= end_time){
 						v += Double.parseDouble(time_value[1]);
 					}
 				}
 				catch (NumberFormatException e) {
 				throw new IOException("CSV file contains non-numeric data");
 				}
-				if(time >= e_interval && time <= end_point){
-					input.setQuick(k,v/count_num);
-					System.out.println(time);
+				if(time >= e_interval && time <= end_time){
+				    double agg_v = v/count_num;
+				 // First line in csv file should be class metric(slo metric)
+				// if aggregated value greater than slo value, set 1 as violation for interval 
+				// otherwise set 0 for compliance 
+				    if (key.get() == 1) {
+					if (agg_v>slo_value)
+					    input.setQuick(k,1);
+					else
+					    input.setQuick(k,0);
+				    } 
+				// if line is not class metric use aggregated value for interval  
+				    else{
+					 input.setQuick(k,v/count_num);
+					 System.out.println(time);
+				    }
 					k++;
 					v=0;
 					count_num=0;
@@ -90,7 +104,7 @@ public class CsvToVectorMapper extends Mapper<LongWritable, Text, Text, VectorWr
 				count_num++;
 			    }
 			
-			while(e_interval <= end_point){
+			while(e_interval <= end_time){
 				v=0;
 				input.setQuick(k,v);
 				k++;

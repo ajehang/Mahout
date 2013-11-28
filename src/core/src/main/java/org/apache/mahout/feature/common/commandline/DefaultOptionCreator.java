@@ -26,9 +26,9 @@ public final class DefaultOptionCreator {
 	public static final String ROW_NUMBER = "numRows";
 	public static final String COLUMN_NUMBER = "numCols";
 	public static final String FEATURE_NUMBER = "numFeature";
-	public static final String BEGIN_POINT = "beginTime";
-	public static final String END_POINT = "endTime";
-	
+	public static final String START_TIME = "startTime";
+	public static final String END_TIME = "endTime";
+        public static final String SLO_VALUE = "sloValue";
 	public static DefaultOptionBuilder targetColumnOption() {
 		return new DefaultOptionBuilder()
         .withLongName(TARGET_COLUMN)
@@ -77,26 +77,37 @@ public final class DefaultOptionCreator {
         .withDescription(
             "Number of feature to select");
 	}
-	public static DefaultOptionBuilder startIntervalOption() {
+	public static DefaultOptionBuilder startTimeOption() {
 		return new DefaultOptionBuilder()
-        .withLongName(BEGIN_POINT)
+        .withLongName(START_TIME)
         .withRequired(true)
-        .withShortName("begin")
+        .withShortName("start")
         .withArgument(
-            new ArgumentBuilder().withName(BEGIN_POINT).withMinimum(1)
+            new ArgumentBuilder().withName(START_TIME).withMinimum(1)
                 .withMaximum(1).create())
         .withDescription(
-            "Start point of Interval");
+            "Starting time of Interval");
 	}
-	public static DefaultOptionBuilder endIntervalOption() {
+	public static DefaultOptionBuilder endTimeOption() {
 		return new DefaultOptionBuilder()
-        .withLongName(END_POINT)
+        .withLongName(END_TIME)
         .withRequired(true)
         .withShortName("end")
         .withArgument(
-            new ArgumentBuilder().withName(END_POINT).withMinimum(1)
+            new ArgumentBuilder().withName(END_TIME).withMinimum(1)
                 .withMaximum(1).create())
         .withDescription(
-            "End point of Interval");
+            "End time of Interval");
 	}
+    public static DefaultOptionBuilder sloValueOption() {
+	return new DefaultOptionBuilder()
+	    .withLongName(SLO_VALUE)
+	    .withRequired(true)
+	    .withShortName("slo")
+	    .withArgument(
+			  new ArgumentBuilder().withName(SLO_VALUE).withMinimum(1)
+			  .withMaximum(1).create())
+	    .withDescription(
+			     "Service Level Objective Value");
+    }
 }

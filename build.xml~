@@ -1,0 +1,59 @@
+<project default="dist" basedir=".">
+<property name="dist"  location="dist"/>
+ <path id="project.class.path">  
+    <fileset dir="/usr/local/hadoop">
+      <include name="**/*.jar"/>
+    </fileset>
+    <fileset dir="/usr/local/hadoop/lib">
+      <include name="**/*.jar"/>
+    </fileset>
+    <fileset dir="/usr/local/hbase">
+      <include name="**/*.jar"/>
+    </fileset>
+    <fileset dir="/usr/local/hbase/lib">
+      <include name="**/*.jar"/>
+    </fileset>
+   <fileset dir="/usr/local/mahout">
+      <include name="**/*.jar"/>
+   </fileset>
+ <fileset dir="/usr/local/mahout/lib">
+      <include name="**/*.jar"/>
+ </fileset>
+</path> 
+ <target name="init">
+        <mkdir dir="${build}"/>
+        <mkdir dir="${jar}"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+ </target>
+
+ <target name="compile" depends="init">
+        <!--mkdir dir="bin"/-->
+        <javac srcdir="src" destdir="${build}">
+         <classpath refid="project.class.path"/>
+	</javac>
+    </target>
+
+    <target name="jar" depends="compile"
+        description="generate the distribution">  
+      <jar jarfile="${jar}/mahout_feature.jar" basedir="${build}">
+   <!--   <manifest>
+           <attribute name="Main-Class" value=""/>
+      </manifest> -->	
+      </jar>
+    </target>
+
+    <target name="run">
+        <!--java jar="${dist}/holtwinter.jar" fork="true"/-->
+        <!--java jar="${dist}/MapRHW.jar" fork="true"/-->
+    </target>
+
+ <target name="clean" description="clean up" depends="jar">
+    <delete dir="${build}"/>
+</target>
+    <target name="clean-build" depends="clean,jar"/>
+    <target name="main" depends="clean,run"/>
+</project>

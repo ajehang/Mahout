@@ -52,21 +52,23 @@ public class CsvToVectorDriver extends AbstractJob {
 		addInputOption();
 		addOutputOption();
 		addOption(DefaultOptionCreator.columnNumberOption().create());
-		addOption(DefaultOptionCreator.startIntervalOption().create());
-		addOption(DefaultOptionCreator.endIntervalOption().create());
+		addOption(DefaultOptionCreator.startTimeOption().create());
+		addOption(DefaultOptionCreator.endTimeOption().create());
+		addOption(DefaultOptionCreator.sloValueOption().create());
 		Map<String,List<String>> parsedArgs = parseArguments(args);
 		
 		Path input = getInputPath();
 		Path output = getOutputPath();
 		
 		int columnNumber = Integer.parseInt(getOption(DefaultOptionCreator.COLUMN_NUMBER));
-		long begin_point = new java.text.SimpleDateFormat("yyyy/MM/dd-HH:mm").parse(getOption(DefaultOptionCreator.BEGIN_POINT)).getTime() / 1000;
-		long end_point = new java.text.SimpleDateFormat("yyyy/MM/dd-HH:mm").parse(getOption(DefaultOptionCreator.END_POINT)).getTime() / 1000;
+		long start_time = new java.text.SimpleDateFormat("yyyy/MM/dd-HH:mm").parse(getOption(DefaultOptionCreator.START_TIME)).getTime() / 1000;
+		long end_time = new java.text.SimpleDateFormat("yyyy/MM/dd-HH:mm").parse(getOption(DefaultOptionCreator.END_TIME)).getTime() / 1000;
+		double slo_value = Double.parseDouble(getOption(DefaultOptionCreator.SLO_VALUE));
 		Configuration confVector = getConf();
 		confVector.set(DefaultOptionCreator.COLUMN_NUMBER, ""+columnNumber);
-		confVector.set(DefaultOptionCreator.BEGIN_POINT, ""+begin_point);
-		confVector.set(DefaultOptionCreator.END_POINT, ""+end_point);
-
+		confVector.set(DefaultOptionCreator.START_TIME, ""+start_time);
+		confVector.set(DefaultOptionCreator.END_TIME, ""+end_time);
+                confVector.set(DefaultOptionCreator.SLO_VALUE, ""+slo_value);
 		Job jobVector = HadoopUtil.prepareJob(input,
                            output,
                            TextInputFormat.class,
