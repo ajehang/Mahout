@@ -26,13 +26,13 @@ LIB_DIR="dist"
 
 
 FEATURE_SELECTED=5
-START_TIME=2013/10/30-07:00
-END_TIME=2013/10/30-08:00
-SLO=0.5
+START_TIME=2013/08/27-23:00
+END_TIME=2013/08/28-00:00
+SLO=1
+TARGET_METRIC=weapp.responsetime:appdomain=wp-local:
 DATASET=part-r-00000
 
 # END configuration
-
 
 hadoop dfs  -rmr temp/
 hadoop dfs  -rmr ${OUTPUT_DIR}/csv
@@ -42,7 +42,7 @@ hadoop dfs  -rmr ${OUTPUT_DIR}/matrix
 # Conversion from CSV to Vectorized data
 ${MAHOUT_HOME}/bin/mahout hadoop jar ${LIB_DIR}/mahout_feature.jar \
         org.apache.mahout.feature.common.csv.CsvToVectorDriver -libjars /usr/local/mahout/mahout-core-0.7-job.jar\
-        -i ${OUTPUT_DIR}/${DATASET} -o ${OUTPUT_DIR}/csv -nc 12 -start ${START_TIME} -end ${END_TIME} -slo 0.5
+        -i ${OUTPUT_DIR}/${DATASET} -o ${OUTPUT_DIR}/csv -nc 12 -start ${START_TIME} -end ${END_TIME} -slo ${SLO} -metric ${TARGET_METRIC}
 
 ${MAHOUT_HOME}/bin/mahout rowid -i ${OUTPUT_DIR}/csv/part-m-00000 -o ${OUTPUT_DIR}/matrix
 
