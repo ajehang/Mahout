@@ -29,7 +29,6 @@ public final class DefaultOptionCreator {
 	public static final String START_TIME = "startTime";
 	public static final String END_TIME = "endTime";
         public static final String SLO_VALUE = "sloValue";
-        public static final String TARGET_METRIC = "targetMetric";
 	public static DefaultOptionBuilder targetColumnOption() {
 		return new DefaultOptionBuilder()
         .withLongName(TARGET_COLUMN)
@@ -111,15 +110,4 @@ public final class DefaultOptionCreator {
 	    .withDescription(
 			     "Service Level Objective Value");
     }
-    public static DefaultOptionBuilder targetMetricOption() {
-        return new DefaultOptionBuilder()
-            .withLongName(TARGET_METRIC)
-            .withRequired(true)
-            .withShortName("metric")
-            .withArgument(
-                          new ArgumentBuilder().withName(TARGET_METRIC).withMinimum(1)
-                          .withMaximum(1).create())
-	    .withDescription(
-			     "Name of metric declared as Class Variable");
-    }
-}
+  }

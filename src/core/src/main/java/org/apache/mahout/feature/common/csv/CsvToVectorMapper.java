@@ -36,15 +36,12 @@ public class CsvToVectorMapper extends Mapper<LongWritable, Text, Text, VectorWr
 	long start_time;
 	long end_time;
 	double slo_value;
-        String target_metric;
 	protected void setup(Context context) throws IOException, InterruptedException {
 		Configuration conf = context.getConfiguration();
 		columnNumber = Integer.parseInt(conf.get(DefaultOptionCreator.COLUMN_NUMBER));
 		start_time=Long.parseLong(conf.get(DefaultOptionCreator.START_TIME));
 		end_time=Long.parseLong(conf.get(DefaultOptionCreator.END_TIME));
                 slo_value=Double.parseDouble(conf.get(DefaultOptionCreator.SLO_VALUE));
-		target_metric=conf.get(DefaultOptionCreator.TARGET_METRIC);
-
 	}
 			
 	public void map(LongWritable key, Text line, Context context) throws IOException, InterruptedException {
@@ -57,7 +54,7 @@ public class CsvToVectorMapper extends Mapper<LongWritable, Text, Text, VectorWr
 		int k = 0;
 		double v = 0.0;
 		long time=0;
-
+                boolean classflag=false;
 		String keystring="";
 		Vector input = new RandomAccessSparseVector(columnNumber);
 		String[] values = line.toString().split(";");
@@ -66,6 +63,7 @@ public class CsvToVectorMapper extends Mapper<LongWritable, Text, Text, VectorWr
 		if(values.length > 4)
 		    {
 			keystring=values[0];
+                        classflag = keystring.equals("class");
 			long s_interval=start_time;
 			long e_interval=start_time+300;
 			
@@ -87,14 +85,14 @@ public class CsvToVectorMapper extends Mapper<LongWritable, Text, Text, VectorWr
 				 // First line in csv file should be class metric(slo metric)
 				// if aggregated value greater than slo value, set 1 as violation for interval 
 				// otherwise set 0 for compliance 
-				    if (keystring == target_metric) {
+				    if (classflag==true) {
 					if (agg_v>slo_value){
 					    input.setQuick(k,1);
-					}
+					}	
 					else{
-					    input.setQuick(k,0);
+					    input.setQuick(k,-1);
 					}
-				    } 
+				    }
 				// if line is not class metric use aggregated value for interval  
 				    else{
 					 input.setQuick(k,agg_v);
